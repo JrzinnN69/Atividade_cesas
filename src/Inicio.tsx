@@ -19,6 +19,6 @@ export function Inicio({ onNavigate }: HomePageProps) {
   ];
 
   return (
-   <h1>inicio</h1>
+   <img className='img-g' src="/img/telainicio.png" alt="" />
   );
 }

@@ -63,39 +63,43 @@ export function MinhasReservas({
     <div className="container py-4">
       {/* Header */}
       <h1 className="mb-4">Minhas Reservas</h1>
+      {/* Filters Card */}
+      <div className="mb-4">
+        {/* Título "Filtros" com fundo cinza-claro e largura ajustada */}
+        <h5 className="d-inline-block fs-6 mb-0 text-muted p-3 pt-2 pb-1 bg-cinza-claro rounded-top">
+          Filtros
+        </h5>
 
-      {/* Filters */}
-      <div className="card mb-4">
-        <div className="card-body row g-3">
-          <div className="col-md-3">
-            <label className="form-label small">Estado</label>
-            <div className="input-group">
-              <span className="input-group-text"><Filter size={16} /></span>
-              <select
-                className="form-select"
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="todos">Todos</option>
-                <option value="confirmed">Confirmadas</option>
-                <option value="cancelled">Canceladas</option>
-              </select>
-            </div>
+        <div className="d-flex flex-row bg-cinza-claro g-3">
+          {/* Estado */}
+          <div className="largura p-3">
+            <label className="form-label text-muted small mb-1">Estado</label>
+            <select
+              className="form-select text-muted "
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="todos">Todos</option>
+              <option value="confirmed">Confirmadas</option>
+              <option value="cancelled">Canceladas</option>
+            </select>
           </div>
 
-          <div className="col-md-3">
-            <label className="form-label small">Data</label>
-            <select className="form-select">
-              <option value="todos">Todas</option>
+          {/* Data */}
+          <div className="largura p-3">
+            <label className="form-label text-muted small mb-1">Data</label>
+            <select className="form-select text-muted">
+              <option value="todos" className='text-muted'>Todas</option>
               <option value="hoje">Hoje</option>
               <option value="semana">Esta Semana</option>
               <option value="mes">Este Mês</option>
             </select>
           </div>
 
-          <div className="col-md-3">
-            <label className="form-label small">Horário</label>
-            <select className="form-select">
+          {/* Horário */}
+          <div className="largura p-3">
+            <label className="form-label text-muted small mb-1">Horário</label>
+            <select className="form-select text-muted ">
               <option value="todos">Todos</option>
               <option value="manha">Manhã</option>
               <option value="tarde">Tarde</option>
@@ -103,21 +107,33 @@ export function MinhasReservas({
             </select>
           </div>
 
-          <div className="col-md-3">
-            <label className="form-label small">Buscar</label>
+          {/* Buscar */}
+          <div className="largura p-3">
+            <label className="form-label text-muted small mb-1">Buscar</label>
             <div className="input-group">
-              <span className="input-group-text"><Search size={16} /></span>
+              <span className="input-group-text bg-white border-end-0">
+                <Search size={16} />
+              </span>
               <input
                 type="text"
-                className="form-control"
-                placeholder="Nome do espaço..."
+                className="form-control border-start-0 ps-0 text-muted "
+                placeholder="Nome do espaço"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
+          {/* Botão Enviar */}
+          <div className="p-3 d-flex align-items-end">
+            <button className="btn rounded-pill bg-cinza-escuro px-4">
+              Enviar
+            </button>
+          </div>
+
         </div>
       </div>
+
+
 
       
         {/* Tabs */}
@@ -139,7 +155,7 @@ export function MinhasReservas({
             </button>
           </li>
         </ul>
-        <div className='border border-top-0'>
+        <div className='border border-top-0 p-4'>
         {/* Reservation Cards */}
         {filteredReservations.length === 0 ? (
           <div className="card text-center p-5">
@@ -148,10 +164,10 @@ export function MinhasReservas({
             </button>
           </div>
         ) : (
-          <div className="row g-4">
+          <div className="d-flex flex-column gap-4">
             {filteredReservations.map((reservation) => (
               <div key={reservation.id} className=" ">
-                <div className="card m-4 p-4 pt-0">
+                <div className="card m-0 p-4 pt-0">
                   <div className='d-flex flex-row justify-content-between'>
                       <span className={` badge ${reservation.status === 'confirmed' ? 'azul-claro' : 'vermelho-claro'} hh fw-normal p-2`}>
                         {reservation.status === 'confirmed' ? 'Reservado' : 'Cancelada'}
