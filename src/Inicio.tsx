@@ -1,6 +1,7 @@
 import { useState } from 'react';
 interface HomePageProps {
   onNavigate: (screen: string, resourceId?: string) => void;
+  
 }
 
 export function Inicio({ onNavigate }: HomePageProps) {

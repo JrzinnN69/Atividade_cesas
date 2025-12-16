@@ -4,7 +4,7 @@ interface Resource {
   id: string;
   name: string;
   category: string;
-  image: string;
+  icon: string;
   sportType?: string;
   resourceType?: string;
 }
@@ -47,7 +47,7 @@ export function Resumo({
     <div className="row g-4">
       {/* Main Form */}
       <div className="">
-        <h2 className='fs-2 mb-4'>Confirmação da reserva</h2>
+        <h2 className='fs-3 mb-4'>Confirmação da reserva</h2>
       <div className='border rounded-2 border-verde'>
         <div className='border-bottom border-verde'style={{ backgroundColor: 'rgba(245, 255, 254, 1)' }}>
             <h3 className='m-0 fw-light p-3'style={{ color: 'rgba(24, 122, 117, 1)' }}>Confira os campos abaixo para prosseguir com sua reserva:</h3>

@@ -68,11 +68,11 @@ export function Horarios({ selectedDate, selectedResource, selectedSlot, onSlotS
   const monthName = selectedDate.toLocaleDateString('pt-BR', { month: 'long' });
   return (
     <div className="container my-4 p-0">
-    <h2 className='fs-2'>Grade de horários - Recurso</h2>
+    <h2 className='fs-3'>Grade de horários - Recurso</h2>
 
       {/* Header */}
       <div className="mb-4 text-center">
-        <h3 className="fs-2 text-muted m-0">
+        <h3 className="fs-4 text-muted m-0">
           {monthName.charAt(0).toUpperCase() + monthName.slice(1)}
         </h3>
       </div>

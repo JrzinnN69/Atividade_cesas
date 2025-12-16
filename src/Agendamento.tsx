@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Horarios } from './Horarios';
 import { Resumo } from './Resumo';
-import { Navegacao } from './Navegacao';
-import { Search } from 'lucide-react';
+import { Search, Waves, Dumbbell , Volleyball } from 'lucide-react';
 import { Resource, TimeSlot, Screen } from './types';
+
+
 
 interface NewReservationData {
   resource: Resource;
@@ -19,6 +20,9 @@ interface BookingPageProps {
   onReservationComplete: (reservation: NewReservationData) => void;
 }
 
+
+
+
 export function Agendamento({
   resources,
   preSelectedResourceId,
@@ -27,7 +31,7 @@ export function Agendamento({
 }: BookingPageProps) {
   const [step, setStep] = useState<'select-resource' | 'select-time' | 'summary'>('select-resource');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDate, setSelectedDate] = useState(new Date()); 
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [description, setDescription] = useState('');
@@ -66,20 +70,13 @@ export function Agendamento({
         description,
       });
 
-      // Reset estado
       setStep('select-resource');
       setSelectedResource(null);
       setSelectedSlot(null);
       setDescription('');
-      
+
       onNavigate('my-reservations');
     }
-  };
-
-  const handleBackToResources = () => {
-    setStep('select-resource');
-    setSelectedResource(null);
-    setSelectedSlot(null);
   };
 
   const handleBackToTime = () => {
@@ -89,36 +86,47 @@ export function Agendamento({
 
   const renderBreadcrumb = () => {
     if (step === 'select-resource') return <>Início &gt; Nova Reserva</>;
-    if (step === 'select-time' && selectedResource) return <>Início &gt; Nova Reserva &gt; {selectedResource.name}</>;
-    if (step === 'summary' && selectedResource && selectedSlot) return <>Início &gt; Nova Reserva &gt; {selectedResource.name} &gt; Confirmação</>;
+    if (step === 'select-time' && selectedResource)
+      return <>Início &gt; Nova Reserva &gt; {selectedResource.name}</>;
+    if (step === 'summary' && selectedResource)
+      return <>Início &gt; Nova Reserva &gt; {selectedResource.name} &gt; Confirmação</>;
     return null;
   };
-  const getBreadcrumbItems = () => {
-    const items = [{ label: 'Início', onClick: () => onNavigate('home') }, { label: 'Nova Reserva' }];
-    if (step === 'select-time' && selectedResource) {
-      items.push({ label: selectedResource.name });
-    } else if (step === 'summary' && selectedResource) {
-      items.push({ label: selectedResource.name, onClick: handleBackToResources });
-      items.push({ label: 'Confirmação' });
+
+  const getResourceIcon = (icon: Resource['icon']) => {
+    switch (icon) {
+      case 'quadra':
+        return <Volleyball size={80} color=" #00E5C7" />;
+      case 'campo':
+        return <Dumbbell size={80} color=" #00E5C7"/>;
+      case 'piscina':
+        return <Waves size={80} color="#00E5C7" />;
+      default:
+        return null;
     }
-    return items;
   };
 
   return (
     <div className="container fs-6 py-4">
-      {/* Breadcrumb simples */}
-      <div className="mb-3 " style={{ color: '#437D7B', fontWeight: 500 }}>
+      {/* Breadcrumb */}
+      <div className="mb-3" style={{ color: '#437D7B', fontWeight: 500 }}>
         {renderBreadcrumb()}
       </div>
 
-      {/* Step 1: Select Resource */}
+      {/* Seleção de recurso */}
       {step === 'select-resource' && (
         <>
-          <h2 className="h5 mb-3">Escolha o Espaço</h2>
-          <div className="card flex-row mb-3 p-3 border-secondary-subtle" style={{ backgroundColor: 'rgba(242, 242, 242, 1)' }}>
-            <h3 className='m-0 fw-light' style={{ color: 'rgba(102, 105, 137, 1)' }}>Busque um recurso</h3>
+          <h2 className="fs-3 mb-3">Escolha o Espaço</h2>
+
+          <div
+            className="card flex-row align-items-center gap-3 mb-3 p-3 border-secondary-subtle"
+            style={{ backgroundColor: 'rgba(242, 242, 242, 1)' }}
+          >
+            <h3 className="m-0 fw-light fs-6 text-muted">Busque um recurso</h3>
             <div className="input-group">
-              <span className="input-group-text border-end-0 bg-white"><Search size={16} /></span>
+              <span className="input-group-text border-end-0 bg-white">
+                <Search size={16} />
+              </span>
               <input
                 type="text"
                 className="form-control ps-0 border-start-0 bg-white"
@@ -128,48 +136,39 @@ export function Agendamento({
               />
             </div>
           </div>
-          <div className='border rounded-2 border-verde'>
 
-            <div className='border-bottom border-verde'style={{ backgroundColor: 'rgba(245, 255, 254, 1)' }}>
-              <h3 className='m-0 fw-light p-3'style={{ color: 'rgba(24, 122, 117, 1)' }}>Ou selecione o espaço que desejar</h3>
+          <div className="border rounded-2 border-verde">
+            <div
+              className="border-bottom border-verde"
+              style={{ backgroundColor: 'rgba(245, 255, 254, 1)' }}
+            >
+              <h3 className="m-0 fw-light p-3 fs-6" style={{ color: 'rgba(24, 122, 117, 1)' }}>
+                Ou selecione o espaço que desejar
+              </h3>
             </div>
 
             <div className="row g-4 p-4">
               {filteredResources.map(resource => (
                 <div key={resource.id} className="col-12 col-md-6 col-lg-4">
                   <div
-                    className="card h-100 shadow-sm cursor-pointer position-relative text-white"
-                    style={{ cursor: 'pointer', overflow: 'hidden' }}
+                    className="card h-100 shadow-sm cursor-pointer"
                     onClick={() => handleResourceSelect(resource)}
                   >
-                    <img
-                      src={resource.image}
-                      alt={resource.name}
-                      className="card-img-top"
-                      style={{ height: '180px', objectFit: 'cover', filter: 'brightness(0.6)' }} // escurece a imagem para o texto aparecer
-                    />
+                    <div className="card-body bg-verde-claro icone-verde d-flex flex-column align-items-center justify-content-center text-center gap-3 py-4">
+                      {getResourceIcon(resource.icon)}
+                    
 
-                    {/* Nome centralizado sobre a imagem */}
-                    <div
-                      className="position-absolute top-50 start-50 translate-middle text-center"
-                      style={{ pointerEvents: 'none' }}
-                    >
-                      <h5 className="mb-0 fw-bold fs-2">{resource.name}</h5>
-                    </div>
-
-                    {/* Badge de categoria */}
-                    <div className="position-absolute top-0 end-0 m-2">
-                      <span className="badge bg-success">{resource.category}</span>
+                      <h5 className="fw-normal mb-0">{resource.name}</h5>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-
           </div>
         </>
       )}
 
+      {/* Horários */}
       {step === 'select-time' && selectedResource && (
         <Horarios
           selectedDate={selectedDate}
@@ -179,6 +178,7 @@ export function Agendamento({
         />
       )}
 
+      {/* Resumo */}
       {step === 'summary' && selectedResource && selectedSlot && (
         <Resumo
           selectedResource={selectedResource}

@@ -140,3 +140,20 @@ small {
 .img-g{
   width: 100%!important;
 }
+
+
+.bg-verde-claro{
+  background-color: #F5FFFE!important;
+  color: #0F827F;
+}
+.bg-verde-claro:hover{
+  background-color: #CCFFF8!important;
+}
+
+.ggg{
+  border-radius: 0px 5px 5px 5px!important;
+}
+
+.w-max {
+  width: max-content;
+}

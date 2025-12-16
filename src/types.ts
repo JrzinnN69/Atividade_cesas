@@ -4,10 +4,11 @@ export interface Resource {
   id: string;
   name: string;
   category: string;
-  image: string;
   sportType: string;
-  resourceType?: string;
+  resourceType: string;
+  icon: 'quadra' | 'campo' | 'piscina';
 }
+
 
 export interface TimeSlot {
   time: string;
@@ -19,7 +20,7 @@ export interface Reservation {
   resource: {
     name: string;
     category: string;
-    image: string;
+    icon: 'quadra' | 'campo' | 'piscina';
   };
   date: Date;
   slot: TimeSlot;

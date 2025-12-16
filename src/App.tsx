@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Layout } from './Layout';
 import { Inicio } from './Inicio';
-import { Recursos } from './Recursos';
 import { Agendamento } from './Agendamento';
 import { MinhasReservas } from './MinhasReservas';
 import { Screen, Resource, Reservation } from './types';
@@ -12,10 +11,31 @@ export default function App() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
 
   const allResources: Resource[] = [
-    { id: '1', name: 'Quadra', category: 'Quadra Coberta', image: 'https://images.unsplash.com/photo-1761644273884-83839f8f22e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg', sportType: 'Coletivo', resourceType: 'Quadra' },
-    { id: '2', name: 'Society', category: 'Campo', image: 'https://images.unsplash.com/photo-1551958219-acbc608c6377?crop=entropy&cs=tinysrgb&fit=max&fm=jpg', sportType: 'Coletivo', resourceType: 'Campo' },
-    { id: '3', name: 'Piscina', category: 'Área Aquática', image: 'https://images.unsplash.com/photo-1576610616656-d3aa5d1f4534?crop=entropy&cs=tinysrgb&fit=max&fm=jpg', sportType: 'Individual', resourceType: 'Piscina' },
-  ];
+  {
+    id: '1',
+    name: 'Quadra',
+    category: 'Quadra Coberta',
+    sportType: 'Coletivo',
+    resourceType: 'Quadra',
+    icon: 'quadra',
+  },
+  {
+    id: '2',
+    name: 'Academia',
+    category: 'Treino',
+    sportType: 'Individual',
+    resourceType: 'Treino',
+    icon: 'campo',
+  },
+  {
+    id: '3',
+    name: 'Piscina',
+    category: 'Área Aquática',
+    sportType: 'Individual',
+    resourceType: 'Piscina',
+    icon: 'piscina',
+  },
+];
 
   const handleNavigate = (screen: Screen, resourceId?: string) => {
     setCurrentPage(screen);
@@ -40,7 +60,7 @@ export default function App() {
   return (
     <Layout onNavigate={handleNavigate}>
       {currentPage === 'home' && <Inicio onNavigate={handleNavigate} />}
-      {currentPage === 'resources' && <Recursos resources={allResources} onNavigate={handleNavigate} />}
+      {currentPage === 'resources'}
       {currentPage === 'booking' && (
         <Agendamento
           resources={allResources}

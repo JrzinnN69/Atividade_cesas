@@ -62,7 +62,7 @@ export function MinhasReservas({
   return (
     <div className="container py-4">
       {/* Header */}
-      <h1 className="mb-4">Minhas Reservas</h1>
+      <h1 className="mb-4 fs-3">Minhas Reservas</h1>
       {/* Filters Card */}
       <div className="mb-4">
         {/* Título "Filtros" com fundo cinza-claro e largura ajustada */}
@@ -70,7 +70,7 @@ export function MinhasReservas({
           Filtros
         </h5>
 
-        <div className="d-flex flex-row bg-cinza-claro g-3">
+        <div className="d-flex flex-row bg-cinza-claro ggg g-3">
           {/* Estado */}
           <div className="largura p-3">
             <label className="form-label text-muted small mb-1">Estado</label>
@@ -158,11 +158,9 @@ export function MinhasReservas({
         <div className='border border-top-0 p-4'>
         {/* Reservation Cards */}
         {filteredReservations.length === 0 ? (
-          <div className="card text-center p-5">
-            <button className="btn btn-success" onClick={() => onNavigate('booking')}>
+            <button className="btn btn-success w-max" onClick={() => onNavigate('booking')}>
               Fazer Nova Reserva
             </button>
-          </div>
         ) : (
           <div className="d-flex flex-column gap-4">
             {filteredReservations.map((reservation) => (
