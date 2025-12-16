@@ -1,15 +1,12 @@
 import { useState } from 'react';
-import { CheckCircle, Calendar, Clock, MapPin, User, FileText } from 'lucide-react';
 
 interface Resource {
   id: string;
   name: string;
   category: string;
   image: string;
-  // Propriedades removidas para compatibilidade com App.tsx:
-  // capacity, description (do recurso), location
-  sportType?: string;   // Tornado opcional por segurança
-  resourceType?: string; // Tornado opcional por segurança
+  sportType?: string;
+  resourceType?: string;
 }
 
 interface TimeSlot {
@@ -38,7 +35,6 @@ export function Resumo({
 }: BookingSummaryProps) {
   const [userName, setUserName] = useState('João Silva');
   
-  // CORREÇÃO: Ajustado para 5 caracteres para bater com o texto da UI (estava 10)
   const canConfirm = userName.trim() !== '' && description.trim().length >= 5;
 
   const formatDate = (date: Date) =>
@@ -50,134 +46,95 @@ export function Resumo({
   return (
     <div className="row g-4">
       {/* Main Form */}
-      <div className="col-lg-8">
-        <div className="card">
-          <div className="card-header">
-            <h5 className="mb-1">Confirmação da Reserva</h5>
-            <small className="text-muted">Revise os dados e confirme sua reserva</small>
-          </div>
-
-          <div className="card-body">
-            {/* Alert */}
-            <div className="alert alert-info d-flex align-items-center mb-4">
-              <CheckCircle size={20} className="me-2" />
-              Preencha todos os campos obrigatórios para confirmar a reserva
-            </div>
-
-            {/* Form */}
-            <div className="mb-3">
-              <label className="form-label d-flex align-items-center gap-2">
-                <User size={16} />
-                Nome Completo <span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                placeholder="Digite seu nome completo"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label d-flex align-items-center gap-2">
-                <Calendar size={16} />
-                Data da Reserva
-              </label>
-              <input type="text" className="form-control" value={formatDate(selectedDate)} readOnly />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label d-flex align-items-center gap-2">
-                <Clock size={16} />
-                Horário
-              </label>
-              <input type="text" className="form-control" value={selectedSlot.time} readOnly />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label d-flex align-items-center gap-2">
-                <MapPin size={16} />
-                Espaço
-              </label>
-              <input type="text" className="form-control" value={`${selectedResource.name} - ${selectedResource.category}`} readOnly />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label d-flex align-items-center gap-2">
-                <FileText size={16} />
-                Descrição da Atividade <span className="text-danger">*</span>
-              </label>
-              <textarea
-                className="form-control"
-                rows={4}
-                value={description}
-                onChange={(e) => onDescriptionChange(e.target.value)}
-                placeholder="Descreva o objetivo da reserva (ex: Aula de Voleibol Turma 301)"
-              />
-              <small className="form-text text-muted">Mínimo 5 caracteres ({description.length}/5)</small>
-            </div>
-
-            {!canConfirm && (
-              <div className="alert alert-warning">
-                ⚠️ Preencha o nome completo e a descrição da atividade (mínimo 5 caracteres)
-              </div>
-            )}
-          </div>
-
-          <div className="card-footer d-flex justify-content-end gap-2">
-            <button className="btn btn-outline-secondary" onClick={onBack}>
-              Voltar
-            </button>
-            <button className="btn btn-success" onClick={onConfirm} disabled={!canConfirm}>
-              <CheckCircle size={18} className="me-1" />
-              Confirmar Reserva
-            </button>
-          </div>
+      <div className="">
+        <h2 className='fs-2 mb-4'>Confirmação da reserva</h2>
+      <div className='border rounded-2 border-verde'>
+        <div className='border-bottom border-verde'style={{ backgroundColor: 'rgba(245, 255, 254, 1)' }}>
+            <h3 className='m-0 fw-light p-3'style={{ color: 'rgba(24, 122, 117, 1)' }}>Confira os campos abaixo para prosseguir com sua reserva:</h3>
         </div>
-      </div>
-
-      {/* Sidebar */}
-      <div className="col-lg-4">
-        <div className="card sticky-top" style={{ top: '20px' }}>
-          <div className="card-header">
-            <h6>Resumo</h6>
-          </div>
-
-          <div className="card-body">
-            {/* Resource Image */}
-            <div className="mb-3">
-              <img
-                src={selectedResource.image}
-                alt={selectedResource.name}
-                className="img-fluid rounded"
-              />
+          <div className="card p-4 border-0">
+            <div className="card-header border-0 bg-cinza">
+              <h5 className="mb-1">Informações do seu Agendamento</h5>
             </div>
 
-            <h6>{selectedResource.name}</h6>
-            <span className="badge bg-success mb-3">{selectedResource.category}</span>
-
-            <hr />
-
-            <div className="mb-2">
-              <div className="d-flex align-items-center gap-2 text-muted mb-1">
-                <Calendar size={16} />
-                <span>Data</span>
+            <div className="card-body p-0 ">
+              {/* Nome Completo */}
+              <div className="mt-0 d-flex align-items-start border-bottom bg-cinza-claro">
+                <label className="form-label mt-2 col-2 text-end pe-2">
+                  <span className="text-danger">*</span> Nome Completo
+                </label>
+                <div className="my-2 pe-3 col-10">
+                  <input
+                    type="text"
+                    className="form-control w-100"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                    placeholder="Digite seu nome completo"
+                  />
+                </div>
               </div>
-              <div className="fw-bold">{formatDateLong(selectedDate)}</div>
-            </div>
 
-            <div className="mb-2">
-              <div className="d-flex align-items-center gap-2 text-muted mb-1">
-                <Clock size={16} />
-                <span>Horário</span>
+              {/* Data da Reserva */}
+              <div className="mt-0 d-flex align-items-start border-bottom bg-cinza-claro">
+                <label className="form-label mt-2 col-2 text-end pe-2">Data da Reserva</label>
+                <div className="my-2 pe-3 col-10">
+                  <input type="text" className="form-control" value={formatDate(selectedDate)} readOnly />
+                </div>
               </div>
-              <div className="fw-bold">{selectedSlot.time}</div>
-            </div>
+
+              {/* Horário */}
+              <div className="mt-0 d-flex align-items-start border-bottom bg-cinza-claro">
+                <label className="form-label mt-2 col-2 text-end pe-2">Horário</label>
+                <div className="my-2 pe-3 col-10">
+                  <input type="text" className="form-control" value={selectedSlot.time} readOnly />
+                </div>
+              </div>
+
+              {/* Espaço */}
+              <div className="mt-0 d-flex align-items-start border-bottom bg-cinza-claro">
+                <label className="form-label mt-2 col-2 text-end pe-2">Espaço</label>
+                <div className="my-2 pe-3 col-10">
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={`${selectedResource.name} - ${selectedResource.category}`}
+                    readOnly
+                  />
+                </div>
+              </div>
+
+              {/* Descrição da Atividade */}
+              <div className="mt-0 d-flex align-items-start border-bottom rounded-bottom bg-cinza-claro">
+                <label className="form-label mt-2 col-2 text-end pe-2">
+                  <span className="text-danger">*</span>Descrição da Atividade 
+                </label>
+                <div className="my-2 pe-3 col-10">
+                  <textarea
+                    className="form-control"
+                    rows={4}
+                    value={description}
+                    onChange={(e) => onDescriptionChange(e.target.value)}
+                    placeholder="Descreva o objetivo da reserva"
+                  />
+                  <small className="form-text text-muted">Mínimo 5 caracteres ({description.length}/5)</small>
+                </div>
+              </div>
+
             
+            </div>
           </div>
         </div>
+        <div className="card-footer d-flex justify-content-end gap-2 bg-white mt-3 border-0">
+              <button className="btn bg-cinza-escuro rounded-pill fw-bold" onClick={onBack}>
+                Voltar
+              </button>
+              <button className="btn selecionado fw-bold rounded-pill text-white" onClick={onConfirm} disabled={!canConfirm}>
+                Confirmar Reserva
+              </button>
+            </div>
       </div>
+      
+      
     </div>
   );
 }

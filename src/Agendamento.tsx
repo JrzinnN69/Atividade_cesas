@@ -87,6 +87,12 @@ export function Agendamento({
     setSelectedSlot(null);
   };
 
+  const renderBreadcrumb = () => {
+    if (step === 'select-resource') return <>Início &gt; Nova Reserva</>;
+    if (step === 'select-time' && selectedResource) return <>Início &gt; Nova Reserva &gt; {selectedResource.name}</>;
+    if (step === 'summary' && selectedResource && selectedSlot) return <>Início &gt; Nova Reserva &gt; {selectedResource.name} &gt; Confirmação</>;
+    return null;
+  };
   const getBreadcrumbItems = () => {
     const items = [{ label: 'Início', onClick: () => onNavigate('home') }, { label: 'Nova Reserva' }];
     if (step === 'select-time' && selectedResource) {
@@ -99,41 +105,67 @@ export function Agendamento({
   };
 
   return (
-    <div className="container py-4">
-      {/* @ts-ignore */}
-      <Navegacao items={getBreadcrumbItems()} />
+    <div className="container fs-6 py-4">
+      {/* Breadcrumb simples */}
+      <div className="mb-3 " style={{ color: '#437D7B', fontWeight: 500 }}>
+        {renderBreadcrumb()}
+      </div>
 
+      {/* Step 1: Select Resource */}
       {step === 'select-resource' && (
         <>
           <h2 className="h5 mb-3">Escolha o Espaço</h2>
-          <div className="card mb-3 p-3">
+          <div className="card flex-row mb-3 p-3 border-secondary-subtle" style={{ backgroundColor: 'rgba(242, 242, 242, 1)' }}>
+            <h3 className='m-0 fw-light' style={{ color: 'rgba(102, 105, 137, 1)' }}>Busque um recurso</h3>
             <div className="input-group">
-              <span className="input-group-text"><Search size={16} /></span>
+              <span className="input-group-text border-end-0 bg-white"><Search size={16} /></span>
               <input
                 type="text"
-                className="form-control"
-                placeholder="Buscar recurso..."
+                className="form-control ps-0 border-start-0 bg-white"
+                placeholder="Buscar recurso"
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
+          <div className='border rounded-2 border-verde'>
 
-          <div className="row g-4">
-            {filteredResources.map(resource => (
-              <div key={resource.id} className="col-12 col-md-6 col-lg-4">
-                <div className="card h-100 shadow-sm cursor-pointer" style={{cursor: 'pointer'}} onClick={() => handleResourceSelect(resource)}>
-                  <img src={resource.image} alt={resource.name} className="card-img-top" style={{ height: '180px', objectFit: 'cover' }} />
-                  <div className="position-absolute top-0 end-0 m-2">
-                    <span className="badge bg-success">{resource.category}</span>
-                  </div>
-                  <div className="card-body d-flex flex-column">
-                    <h5 className="card-title">{resource.name}</h5>
-                    <button className="btn btn-success mt-auto">Selecionar</button>
+            <div className='border-bottom border-verde'style={{ backgroundColor: 'rgba(245, 255, 254, 1)' }}>
+              <h3 className='m-0 fw-light p-3'style={{ color: 'rgba(24, 122, 117, 1)' }}>Ou selecione o espaço que desejar</h3>
+            </div>
+
+            <div className="row g-4 p-4">
+              {filteredResources.map(resource => (
+                <div key={resource.id} className="col-12 col-md-6 col-lg-4">
+                  <div
+                    className="card h-100 shadow-sm cursor-pointer position-relative text-white"
+                    style={{ cursor: 'pointer', overflow: 'hidden' }}
+                    onClick={() => handleResourceSelect(resource)}
+                  >
+                    <img
+                      src={resource.image}
+                      alt={resource.name}
+                      className="card-img-top"
+                      style={{ height: '180px', objectFit: 'cover', filter: 'brightness(0.6)' }} // escurece a imagem para o texto aparecer
+                    />
+
+                    {/* Nome centralizado sobre a imagem */}
+                    <div
+                      className="position-absolute top-50 start-50 translate-middle text-center"
+                      style={{ pointerEvents: 'none' }}
+                    >
+                      <h5 className="mb-0 fw-bold fs-2">{resource.name}</h5>
+                    </div>
+
+                    {/* Badge de categoria */}
+                    <div className="position-absolute top-0 end-0 m-2">
+                      <span className="badge bg-success">{resource.category}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
           </div>
         </>
       )}

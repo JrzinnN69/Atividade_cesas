@@ -100,9 +100,7 @@ export function Recursos({ resources, onNavigate }: ResourcesPageProps) {
                 </div>
 
                 <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{resource.name}</h5>
-                  {/* Removidas referências a description/capacity/location */}
-                  
+                  <h5 className="card-title">{resource.name}</h5>                  
                   <button
                     className="btn text-white mt-auto"
                     style={{ backgroundColor: '#1FAD34' }}

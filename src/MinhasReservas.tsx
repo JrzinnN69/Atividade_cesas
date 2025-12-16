@@ -12,7 +12,6 @@ interface Reservation {
   slot: {
     time: string;
   };
-  // REMOVIDA: description: string;
   status: 'confirmed' | 'cancelled';
   createdAt: Date;
 }
@@ -120,74 +119,77 @@ export function MinhasReservas({
         </div>
       </div>
 
-      {/* Tabs */}
-      <ul className="nav nav-tabs mb-4">
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === 'feitas' ? 'active' : ''}`}
-            onClick={() => setActiveTab('feitas')}
-          >
-            Reservas Feitas <span className="badge bg-success ms-1">{confirmedCount}</span>
-          </button>
-        </li>
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === 'todas' ? 'active' : ''}`}
-            onClick={() => setActiveTab('todas')}
-          >
-            Todas as Reservas <span className="badge bg-secondary ms-1">{reservations.length}</span>
-          </button>
-        </li>
-      </ul>
-
-      {/* Reservation Cards */}
-      {filteredReservations.length === 0 ? (
-        <div className="card text-center p-5">
-          <div className="mb-3 d-flex justify-content-center">
-            <Calendar size={40} className="text-secondary" />
+      
+        {/* Tabs */}
+        <ul className="nav nav-tabs m-0">
+          <li className="nav-item me-2"> {/* me-2 adiciona margem à direita */}
+            <button
+              className={`nav-link ${activeTab === 'feitas' ? 'active' : 'not-active'}`}
+              onClick={() => setActiveTab('feitas')}
+            >
+              Reservas ativas <span className="badge bg-success rounded-pill align-middle text-center  ms-1">{confirmedCount}</span>
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'todas' ? 'active' : 'not-active'}`}
+              onClick={() => setActiveTab('todas')}
+            >
+              Todas as reservas <span className="badge bg-success rounded-pill align-middle text-center ms-1">{reservations.length}</span>
+            </button>
+          </li>
+        </ul>
+        <div className='border border-top-0'>
+        {/* Reservation Cards */}
+        {filteredReservations.length === 0 ? (
+          <div className="card text-center p-5">
+            <button className="btn btn-success" onClick={() => onNavigate('booking')}>
+              Fazer Nova Reserva
+            </button>
           </div>
-          <button className="btn btn-success" onClick={() => onNavigate('booking')}>
-            Fazer Nova Reserva
-          </button>
-        </div>
-      ) : (
-        <div className="row g-4">
-          {filteredReservations.map((reservation) => (
-            <div key={reservation.id} className="col-md-6 col-lg-4">
-              <div className="card h-100">
-                <img src={reservation.resource.image} className="card-img-top" alt={reservation.resource.name} />
-                <div className="card-body d-flex flex-column">
-                  <div className="d-flex justify-content-between align-items-start mb-2">
-                    <h5 className="card-title mb-0">{reservation.resource.name}</h5>
-                    <span className={`badge ${reservation.status === 'confirmed' ? 'bg-success' : 'bg-danger'}`}>
-                      {reservation.status === 'confirmed' ? 'Confirmada' : 'Cancelada'}
-                    </span>
-                  </div>
-                  <p className="text-muted small mb-2">{reservation.resource.category}</p>
-
-                  <div className="mb-2">
-                    <div className="d-flex align-items-center gap-2 small text-muted">
-                      <Calendar size={16} className="text-success" /> <span>{formatDateLong(reservation.date)}</span>
+        ) : (
+          <div className="row g-4">
+            {filteredReservations.map((reservation) => (
+              <div key={reservation.id} className=" ">
+                <div className="card m-4 p-4 pt-0">
+                  <div className='d-flex flex-row justify-content-between'>
+                      <span className={` badge ${reservation.status === 'confirmed' ? 'azul-claro' : 'vermelho-claro'} hh fw-normal p-2`}>
+                        {reservation.status === 'confirmed' ? 'Reservado' : 'Cancelada'}
+                      </span>
+                      {reservation.status === 'confirmed' && (
+                          <button
+                            className="btn cancelar rounded-pill mt-4"
+                            onClick={() => handleCancelClick(reservation.id)}
+                          >
+                            Cancelar Reserva
+                          </button>
+                        )}
                     </div>
-                    <div className="d-flex align-items-center gap-2 small text-muted">
-                      <Clock size={16} className="text-success" /> <span>{reservation.slot.time}</span>
-                    </div>
-                  </div>
 
-                  {reservation.status === 'confirmed' && (
-                    <button
-                      className="btn btn-outline-danger mt-auto"
-                      onClick={() => handleCancelClick(reservation.id)}
-                    >
-                      <XCircle size={16} className="me-1" /> Cancelar Reserva
-                    </button>
-                  )}
+                  <div className="card-body ps-0 d-flex flex-column">
+                    <div className="d-flex justify-content-between align-items-start mb-2">
+                      <h5 className="card-title mb-0">{reservation.resource.name}</h5>
+                      
+                    </div>
+                    <p className="text-muted small mb-2">{reservation.resource.category}</p>
+
+                    <div className="mb-2">
+                      <div className="d-flex align-items-center gap-2 small text-muted">
+                        <Calendar size={16} className="text-success" /> <span>{formatDateLong(reservation.date)}</span>
+                      </div>
+                      <div className="d-flex align-items-center gap-2 small text-muted">
+                        <Clock size={16} className="text-success" /> <span>{reservation.slot.time}</span>
+                      </div>
+                    </div>
+
+                    
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
       )}
+        </div>
 
       {/* Cancel Modal */}
       {showCancelModal && (

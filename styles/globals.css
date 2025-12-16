@@ -68,12 +68,61 @@ small {
 .celula{
   height: 72px;
   width: 144px;
+  border-color: white!important;
 }
 
 .selecionado{
-  background-color: #EBEBEB!important;
+  background-color: rgba(31, 173, 52, 1)!important;
+}
+.reservado{
+  border-radius: 3px!important;
+  border-left: 4px solid #000000!important; /* verde */
 }
 
-.ocupado{
-  border: 1px black;
+.border-verde{
+  border-color: rgba(0, 189, 164, 1)!important;
+}
+
+.bg-cinza-claro{
+  background-color: #F2F2F2!important;
+}
+.bg-cinza{
+  background-color: #E6E6E6!important;
+}
+.bg-cinza-escuro{
+  background-color: #D9D9D9!important;
+}
+.azul-claro{
+  background-color: #CCEFFF!important;
+  color: #000000;
+  border-top: 1px solid #008DCC;
+}
+.vermelho-claro{
+  background-color: #FCCFCF!important;
+  color: #000000;
+  border-top: 1px solid #C20A0A;
+}
+
+.cancelar{
+  background-color: #C20A0A;
+  color: white;
+}
+
+.nav-link.not-active {
+    background-color: #F2F2F2!important; /* cinza escuro */
+    color: #0F827F;
+  }
+.nav-link.not-active span{
+    background-color: #818181!important; /* cinza escuro */
+
+  }
+
+  .nav-link.not-active:hover {
+   background-color: #E6E6E6!important;
+; /* cinza um pouco mais claro ao passar o mouse */
+  }
+
+.hh{
+  border-radius: 0px 0px 5px 5px!important;
+  height: max-content!important;
 }

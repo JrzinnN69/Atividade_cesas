@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react'; // Adicionados ícones para navegação, caso queira implementar
 
 interface TimeSlot {
   time: string;
@@ -14,7 +13,7 @@ interface TimeGridProps {
 }
 
 interface Booking {
-  dayIndex: number; // 0=Segunda, 6=Domingo, correspondente ao índice da coluna da tabela
+  dayIndex: number; // 0=Segunda, 6=Domingo
   timeSlot: string;
   user: string;
 }
@@ -23,12 +22,10 @@ export function Horarios({ selectedDate, selectedResource, selectedSlot, onSlotS
   const [view, setView] = useState<'week' | 'month'>('week');
   const [selectedCell, setSelectedCell] = useState<{ day: number; time: string } | null>(null);
 
-  // Função para obter a semana a partir de uma data (começando na Segunda-feira)
   const getWeekDates = (date: Date) => {
     const week = [];
     const current = new Date(date);
-    const day = current.getDay(); // 0 (Dom) a 6 (Sáb)
-    // Calcula a diferença para Segunda-feira (1)
+    const day = current.getDay();
     const diff = current.getDate() - day + (day === 0 ? -6 : 1);
     current.setDate(diff);
     for (let i = 0; i < 7; i++) {
@@ -46,65 +43,57 @@ export function Horarios({ selectedDate, selectedResource, selectedSlot, onSlotS
     '13:00', '13:45', '14:30', '15:15', '16:00', '16:45', '17:30', '18:15', '19:00'
   ];
 
-  // Dados de exemplo de reservas (0=Segunda, 6=Domingo)
   const existingBookings: Booking[] = [
-    { dayIndex: 1, timeSlot: '08:30', user: 'Paula Yuri' }, // Terça
-    { dayIndex: 2, timeSlot: '10:00', user: 'Luane Andrade' }, // Quarta
-    { dayIndex: 4, timeSlot: '13:00', user: 'Alice Pereira' }, // Sexta
+    { dayIndex: 1, timeSlot: '08:30', user: 'Paula Yuri' },
+    { dayIndex: 2, timeSlot: '10:00', user: 'Luane Andrade' },
+    { dayIndex: 4, timeSlot: '13:00', user: 'Alice Pereira' },
   ];
 
-  const isWeekend = (date: Date) => date.getDay() === 0 || date.getDay() === 6; // 0=Dom, 6=Sáb
-  const isBooked = (dayIndex: number, timeSlot: string) =>
-    existingBookings.some(b => b.dayIndex === dayIndex && b.timeSlot === timeSlot);
+  const isWeekend = (date: Date) => date.getDay() === 0 || date.getDay() === 6;
 
   const handleCellClick = (dayIndex: number, timeSlot: string) => {
-    if (isWeekend(weekDates[dayIndex]) || isBooked(dayIndex, timeSlot)) return;
+    const weekend = isWeekend(weekDates[dayIndex]);
+    const booked = existingBookings.some(b => b.dayIndex === dayIndex && b.timeSlot === timeSlot);
+    if (weekend || booked) return;
     setSelectedCell({ day: dayIndex, time: timeSlot });
   };
 
   const handleConfirmSelection = () => {
-    if (selectedCell) onSlotSelect({ time: selectedCell.time, available: true });
-    // Opcional: Voltar ao estado inicial após confirmação
-    setSelectedCell(null); 
+    if (selectedCell) {
+      onSlotSelect({ time: selectedCell.time, available: true });
+      setSelectedCell(null);
+    }
   };
 
-  const monthYear = selectedDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
-
+  const monthName = selectedDate.toLocaleDateString('pt-BR', { month: 'long' });
   return (
-    <div className="container my-4">
+    <div className="container my-4 p-0">
+    <h2 className='fs-2'>Grade de horários - Recurso</h2>
+
       {/* Header */}
-      <div className="card mb-3 p-3">
-        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-          <h5 className="text-capitalize mb-2 mb-md-0">{monthYear}</h5>
-          <div className="btn-group" role="group">
-            <button
-              className={`btn ${view === 'week' ? 'btn-success' : 'btn-outline-secondary'}`}
-              onClick={() => setView('week')}
-            >
-              Semana
-            </button>
-            <button
-              // O botão de Mês está aqui, mas a implementação da visualização está pendente.
-              className={`btn ${view === 'month' ? 'btn-success' : 'btn-outline-secondary'}`}
-              onClick={() => setView('month')}
-            >
-              Mês
-            </button>
-          </div>
-        </div>
+      <div className="mb-4 text-center">
+        <h3 className="fs-2 text-muted m-0">
+          {monthName.charAt(0).toUpperCase() + monthName.slice(1)}
+        </h3>
       </div>
 
       {/* Time Grid */}
       {view === 'week' && (
         <div className="table-responsive">
-          <table className="table table-bordered text-center align-middle">
+          <table
+            className="table align-middle"
+            style={{ borderCollapse: 'collapse' }}
+          >
             <thead className="table-light">
               <tr>
-                <th>Horário</th>
+                <th className="celula bg-white border border-white"></th>
                 {dayNames.map((day, i) => (
-                  <th key={i} className=''>
+                  <th
+                    key={i}
+                    className="bg-cinza text-muted border border-white text-start ps-2"
+                  >
                     {day}<br />
-                    <small className="text-muted fs-4">{weekDates[i].getDate()}</small>
+                    <small className="text-muted fs-3">{weekDates[i].getDate()}</small>
                   </th>
                 ))}
               </tr>
@@ -112,36 +101,34 @@ export function Horarios({ selectedDate, selectedResource, selectedSlot, onSlotS
             <tbody>
               {timeSlots.map(time => (
                 <tr key={time}>
-                  <th scope="row">{time}</th>
+                  <th className="bg-cinza text-muted border border-white text-start ps-2" scope="row">{time}</th>
                   {weekDates.map((date, idx) => {
                     const weekend = isWeekend(date);
-                    const booked = isBooked(idx, time);
+                    const booking = existingBookings.find(b => b.dayIndex === idx && b.timeSlot === time);
+                    const booked = !!booking;
                     const selected = selectedCell?.day === idx && selectedCell?.time === time;
 
-                    let className = "cursor-pointer";
-                    let text = "";
+                    let className = "bg-cinza-claro celula cursor-pointer border border-white text-start ps-2";
+                    let cellContent = "";
 
-                    if (weekend) className = "celula bg-light text-muted";
-                    else if (booked) {
-                        // Estilo Ocupado
-                        className = "celula ocupado cursor-not-allowed";
-                        text="Reservado";
-                    }
-                    else if (selected) className = "selecionado";
-                    else {
-                        // Estilo Disponível (verde implícito pela falta de classe)
-                        className = "celula cursor-pointer";
+                    if (weekend) {
+                      className = "celula bg-cinza text-muted border border-white text-start ps-2";
+                    } else if (booked && booking) {
+                      className = "celula reservado bg-cinza cursor-not-allowed border border-white text-start ps-2";
+                      cellContent = booking.user;
+                    } else if (selected) {
+                      className = "celula selecionado text-light fw-bold border border-white text-start ps-2";
+                      cellContent = "Selecionado";
                     }
 
                     return (
-                      <td 
-                        key={idx} 
-                        className={className} 
+                      <td
+                        key={idx}
+                        className={className}
                         onClick={() => handleCellClick(idx, time)}
-                        // Adicionado um título para acessibilidade/informação sobre a reserva
-                        title={booked ? `Reservado por ${existingBookings.find(b => b.dayIndex === idx && b.timeSlot === time)?.user}` : (weekend ? 'Fim de semana' : 'Disponível')}
+                        title={booked ? `Reservado por ${booking?.user}` : (weekend ? 'Fim de semana' : 'Disponível')}
                       >
-                        {text}
+                        {cellContent}
                       </td>
                     );
                   })}
@@ -151,20 +138,31 @@ export function Horarios({ selectedDate, selectedResource, selectedSlot, onSlotS
           </table>
         </div>
       )}
-      
-      {/* Visualização de Mês (pendente de implementação) */}
+
+      {/* Month view */}
       {view === 'month' && (
-          <div className="card p-5 text-center">
-              <p className="text-muted">Visualização mensal de horários não implementada. Por favor, use a visualização semanal.</p>
-          </div>
+        <div className="card p-5 text-center border-white">
+          <p className="text-muted">Visualização mensal de horários não implementada. Use a visualização semanal.</p>
+        </div>
       )}
 
       {/* Confirm Button */}
       {selectedCell && (
-        <div className="position-fixed bottom-0 start-50 translate-middle-x mb-3">
-            <button className="btn btn-success" onClick={handleConfirmSelection}>
-              Confirmar
-            </button>
+        <div className="position-fixed bottom-0 end-0 mb-5 me-5">
+          <button
+            className="btn fw-bold"
+            onClick={handleConfirmSelection}
+            style={{
+              backgroundColor: 'rgba(31, 173, 52, 1)',
+              color: '#fff',
+              borderRadius: '50px',
+              padding: '10px 25px',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+              border: '1px solid #fff'
+            }}
+          >
+            Confirmar escolha
+          </button>
         </div>
       )}
     </div>
